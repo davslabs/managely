@@ -459,3 +459,9 @@ _ReSharper.*
 bin
 obj
 packages
+
+##Docker
+sqlsystem
+sqldata
+sqllog
+sqlbackup
