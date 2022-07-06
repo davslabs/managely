@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/azure-sql-edge
+    
+    container_name: managely_db
+
+    volumes:
+      - sqlsystem:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+
+    ports:
+      - "1433:1433"
+    restart: always
+    
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: <My-secret-pw@?>
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:
