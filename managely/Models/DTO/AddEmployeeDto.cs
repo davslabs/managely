@@ -20,6 +20,10 @@ namespace Managely.Models.DTO
         [Required]
         public string Location { get; set; }
         [Required]
+        public JobPositionName JobPosition { get; set; }
+        [Required]
+        public DepartmentName Department { get; set; }
+        [Required]
         public RoleName Role { get; set; }
 
         public Guid? ReportsTo { get; set; }

@@ -14,7 +14,9 @@ namespace Managely.Repository.Shared
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<TimeOff> TimeOffs { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Department> Departments { get; set; }
         public DbSet<EmployeeTimeOff> EmployeeTimeOffs { get; set; }
+        public DbSet<JobPosition> JobPositions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,8 +51,12 @@ namespace Managely.Repository.Shared
                 RoleId = roles.FirstOrDefault(r => r.Name.Equals(RoleName.Staff))!.RoleId,
                 PermissionId = permissions.FirstOrDefault(p => p.Name.Equals(PermissionName.Read))!.PermissionId
             });
+            
+            
 
             modelBuilder.Entity<RolePermission>().HasData(rolePermissions);
+            modelBuilder.Entity<Department>().HasData(DepartmentSeed.Get());
+            modelBuilder.Entity<JobPosition>().HasData(JobPositionSeed.Get());
         }
     }
 }

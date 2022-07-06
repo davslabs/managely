@@ -41,7 +41,7 @@ namespace Managely.Controllers
                     TimeOff = timeOff,
                 });
 
-                await _unitOfWork.TimeOff.Add(timeOff);
+                await _unitOfWork.TimeOffs.Add(timeOff);
                 _unitOfWork.Employees.Update(employee);
 
                 _unitOfWork.Complete();
@@ -64,11 +64,16 @@ namespace Managely.Controllers
                 Employee? employee = await _unitOfWork.Employees.GetEmployeeById(employeeId);
                 if (employee == null) throw new Exception("El empleado no existe");
             
-                List<TimeOff> employeeTimeOff = await _unitOfWork.Employees.GetEmployeeTimeOff(employeeId);
-                // List<EmployeeProfileViewModel> employeeTimeOffList =
-                //     _mapper.Map<List<EmployeeProfileViewModel>>(employeeTimeOff);
+                ICollection<TimeOff> employeeTimeOffs = await _unitOfWork.Employees.GetEmployeeTimeOff(employeeId);
+                List<EmployeeTimeOffViewModel> employeeTimeOffList = new List<EmployeeTimeOffViewModel>();
+                
+                foreach(var employeeTimeOff in employeeTimeOffs)
+                {
+                    var et = _mapper.Map<EmployeeTimeOffViewModel>(employeeTimeOff);
+                    employeeTimeOffList.Add(et);
+                }
 
-                return Ok(employeeTimeOff);
+                return Ok(employeeTimeOffList);
             }
             catch(Exception ex)
             {

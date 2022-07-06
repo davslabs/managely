@@ -22,6 +22,14 @@ namespace Managely.Domain.Models
         [Required]
         [DefaultValue(true)]
         public bool IsActive { get; set; }
+        
+        [ForeignKey("JobPosition")]
+        public Guid JobPositionId { get; set; }
+        public virtual JobPosition JobPosition { get; set; }
+        
+        [ForeignKey("Department")]
+        public Guid DepartmentId { get; set; }
+        public Department Department { get; set; }
 
 
         [ForeignKey("Role")]

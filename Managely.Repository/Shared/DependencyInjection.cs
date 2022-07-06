@@ -13,6 +13,8 @@ namespace Managely.Repository.Shared
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IPermissionRepository, PermissionRepository>();
             services.AddTransient<ITimeOffRepository, TimeOffRepository>();
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<IJobPositionRepository, JobPositionRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddDbContext<ApplicationDbContext>(options =>

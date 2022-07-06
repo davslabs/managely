@@ -54,6 +54,8 @@ namespace Managely.Controllers
                 }
 
                 Role? role = await _unitOfWork.Roles.GetByValue(addEmployeeDto.Role);           
+                Department? department = await _unitOfWork.Departments.GetByValue(addEmployeeDto.Department);
+                JobPosition? jobPosition = await _unitOfWork.JobPositions.GetByValue(addEmployeeDto.JobPosition);
 
 
                 Employee newEmployee = new Employee()
@@ -65,6 +67,8 @@ namespace Managely.Controllers
                     Password = addEmployeeDto.Password, 
                     Location = addEmployeeDto.Location,
                     Role = role,
+                    Department = department,
+                    JobPosition = jobPosition,
                     ReportsTo = reporter,
                     ReportsToId = addEmployeeDto.ReportsTo
                 };
@@ -134,14 +138,10 @@ namespace Managely.Controllers
                 IEnumerable<Employee> employees = await _unitOfWork.Employees.GetRelatedEmployees(employeeId);
                 HashSet<EmployeeProfileViewModel> relatedEmployees = new HashSet<EmployeeProfileViewModel>();
 
-                if (employees.Count() > 0)
+                foreach(var employee in employees)
                 {
-                    
-                    foreach(var employee in employees)
-                    {
-                        EmployeeProfileViewModel employeeProfile = _mapper.Map<EmployeeProfileViewModel>(employee);
-                        relatedEmployees.Add(employeeProfile);
-                    }
+                    var employeeProfile = _mapper.Map<EmployeeProfileViewModel>(employee);
+                    relatedEmployees.Add(employeeProfile);
                 }
 
                 return Ok(relatedEmployees);

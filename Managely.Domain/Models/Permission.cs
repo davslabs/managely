@@ -18,6 +18,8 @@ namespace Managely.Domain.Models
         [Required]
         [Column(TypeName = "nvarchar(24)")]
         public PermissionName Name { get; set; }
+        [Required]
+        public string Description { get; set; }
 
         public ICollection<RolePermission> RolePermission { get; set; }
     }

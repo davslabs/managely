@@ -11,16 +11,19 @@ namespace Managely.Repository.Configuration
                 new()
                 {
                     RoleId = Guid.NewGuid(),
+                    Description = "Admin",
                     Name = RoleName.Admin
                 },
                 new()
                 {
                     RoleId = Guid.NewGuid(),
+                    Description = "Manager",
                     Name = RoleName.Manager,
                 },
                 new()
                 {
                     RoleId = Guid.NewGuid(),
+                    Description = "Staff",
                     Name = RoleName.Staff
                 }
             };

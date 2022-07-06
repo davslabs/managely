@@ -2,24 +2,26 @@ using AutoMapper;
 using Managely.Domain.Models;
 using Managely.Models.ViewModel;
 
-namespace Managely.Profiles;
-
-public class EmployeeTimeOffProfile: Profile
+namespace Managely.Profiles
 {
-    public EmployeeTimeOffProfile()
+    public class EmployeeTimeOffProfile: Profile
     {
-        CreateMap<TimeOff, EmployeeTimeOffViewModel>()
-            .ForMember(
-                dest => dest.Reason,
-                opt => opt.MapFrom(src => $"{src.Reason}")
-            )
-            .ForMember(
-                dest => dest.FromDate,
-                opt => opt.MapFrom(src => $"{src.FromDate}")
-            )
-            .ForMember(
-                dest => dest.ThruDate,
-                opt => opt.MapFrom(src => $"{src.ThruDate}")
-            );
+        public EmployeeTimeOffProfile()
+        {
+            CreateMap<TimeOff, EmployeeTimeOffViewModel>()
+                .ForMember(
+                    dest => dest.Reason,
+                    opt => opt.MapFrom(src => $"{src.Reason}")
+                )
+                .ForMember(
+                    dest => dest.FromDate,
+                    opt => opt.MapFrom(src => $"{src.FromDate}")
+                )
+                .ForMember(
+                    dest => dest.ThruDate,
+                    opt => opt.MapFrom(src => $"{src.ThruDate}")
+                );
+        }
     }
 }
+

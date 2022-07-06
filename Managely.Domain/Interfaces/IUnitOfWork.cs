@@ -7,7 +7,10 @@ namespace Managely.Domain.Interfaces
         IEmployeeRepository Employees { get; }
         IRoleRepository Roles { get; }
         IPermissionRepository Permissions { get; set; }
-        ITimeOffRepository TimeOff { get; set; }
+        ITimeOffRepository TimeOffs { get; set; }
+        IDepartmentRepository Departments { get; set; }
+        
+        IJobPositionRepository JobPositions { get; set; }
         int Complete();
     }
 }

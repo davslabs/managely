@@ -12,11 +12,19 @@ namespace Managely.Domain.Models
 
     public class Role
     {
+        public Role()
+        {
+            isEnabled = true;
+        }
+        
         [Key]
         public Guid RoleId { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(24)")]
         public RoleName Name { get; set; }
+        [Required]
+        public string Description { get; set; }
+
         [Required]
         public bool isEnabled { get; set; }
 

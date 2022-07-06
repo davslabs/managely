@@ -8,20 +8,26 @@ namespace Managely.Repository.Shared
         public IEmployeeRepository Employees { get; }
         public IRoleRepository Roles { get; }
         public IPermissionRepository Permissions { get; set;}
-        public ITimeOffRepository TimeOff { get; set; }
+        public ITimeOffRepository TimeOffs { get; set; }
+        public IDepartmentRepository Departments { get; set; }
+        public IJobPositionRepository JobPositions { get; set; }
 
         public UnitOfWork(ApplicationDbContext appDbContext,
             IEmployeeRepository employeeRepository,
             IRoleRepository roleRepository,
             IPermissionRepository permissionRepository,
-            ITimeOffRepository timeOffRepository)
+            ITimeOffRepository timeOffRepository,
+            IDepartmentRepository departmentRepository,
+            IJobPositionRepository jobPositionRepository)
         {
             this._context = appDbContext;
 
             this.Employees = employeeRepository;
             this.Roles = roleRepository;
             this.Permissions = permissionRepository;
-            this.TimeOff = timeOffRepository;
+            this.TimeOffs = timeOffRepository;
+            this.Departments = departmentRepository;
+            this.JobPositions = jobPositionRepository;
         }
         public int Complete()
         {

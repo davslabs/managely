@@ -11,21 +11,25 @@ namespace Managely.Repository.Configuration
                 new()
                 {
                     PermissionId = Guid.NewGuid(),
+                    Description = "Crear",
                     Name = PermissionName.Create
                 },
                 new()
                 {
                     PermissionId = Guid.NewGuid(),
+                    Description = "Editar",
                     Name = PermissionName.Update,
                 },
                 new()
                 {
                     PermissionId = Guid.NewGuid(),
+                    Description = "Leer",
                     Name = PermissionName.Read
                 },
                 new()
                 {
                     PermissionId = Guid.NewGuid(),
+                    Description = "Eliminar",
                     Name = PermissionName.Delete
                 }
             };
