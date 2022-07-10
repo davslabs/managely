@@ -20,18 +20,18 @@ namespace Managely.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAllEmployees(int? take)
         {
             try
             {
-                IEnumerable<Employee> employees = await _unitOfWork.Employees.GetAllEmployees();
+                var employees = await _unitOfWork.Employees.GetAllEmployees();
                 HashSet<EmployeeProfileViewModel> employeeList = new HashSet<EmployeeProfileViewModel>();
-            
-                foreach (Employee employee in employees)
+                
+                foreach (var employee in employees
+                             .OrderBy(e => e.StartDate)
+                             .Take(take ?? employees.Count()))
                 {
-                    EmployeeProfileViewModel employeeProfile = _mapper.Map<EmployeeProfileViewModel>(employee);
-
-                    employeeList.Add(employeeProfile);
+                    employeeList.Add(_mapper.Map<EmployeeProfileViewModel>(employee));
                 }
             
                 return Ok(employeeList);
@@ -41,7 +41,7 @@ namespace Managely.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> AddEmployee([FromBody] AddEmployeeDto addEmployeeDto) 
         {

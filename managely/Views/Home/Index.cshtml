@@ -3,5 +3,126 @@
     Layout = "_Layout";
 }
 
-<h1><i class="material-icons">add</i> Welcome</h1>
-<a class="waves-effect waves-light btn">button</a>
+@model Managely.Models.ViewModel.EmployeeProfileViewModel
+
+<div class="row">
+    <div class="col s4 hide-on-small-only">
+        <div class="avatar">
+            <div class="card-panel grey lighten-5 z-depth-1">
+                <div class="row valign-wrapper">
+                    <div class="col s4">
+                        <img alt=""
+                             height="120"
+                             width="120"
+                             src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                             class="responsive-img circle"/>
+                        
+                    </div>
+                    <div class="col s8">
+                        <span class="employee-name">
+                            @Model.DisplayName <br/>
+                            <span class="employee-mail truncate">@Model.Email</span>
+                            <span class="employee-profile">
+                                <a href="@Url.Action("GetEmployeeProfile", "Collaborators", new { employeeId = Model.EmployeeId })">
+                                    Ver perfil
+                                </a>
+                            </span>
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s8">
+
+        <ul class="collapsible">
+            <li class="active">
+                <div class="collapsible-header"><i class="material-icons">contacts</i>Ingresos recientes</div>
+                <div id="latest-employees" class="collapsible-body"></div>
+            </li>
+            <li>
+                <div class="collapsible-header"><i class="material-icons">people</i>Organización</div>
+                <div class="collapsible-body">@{ await Html.RenderPartialAsync("OrgChart"); }</div>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.collapsible').collapsible();
+        getLatestEmployees();
+    });
+    
+    function getLatestEmployees() {
+        $.ajax({
+            url: "/api/employees?take=5",
+            type: "GET",
+            dataType: "json",
+            success: function(data) {
+                setLatestEmployees(data);
+            },
+            error: function(data) {
+                console.log(data);
+            }
+        });
+    }
+    
+    function setLatestEmployees(employees) {
+       let html = "";
+       for(let i = 0; i < employees.length; i++) {
+           html += '<div class="card-panel grey lighten-5">';
+           html += '<div class="row valign-wrapper">';
+           html += '<div class="col s2">';
+           html += '<img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->';
+           html += '</div>';
+           html += '<div class="col s10">';
+           html += '<span class="black-text">';
+           html +=  `<h6>${employees[i].displayName}<h6>`;
+           html += `<span class="employee-mail">${employees[i].jobPosition} en ${employees[i].department}</span><br/>`;
+           html +=  `<span class="employee-mail">${employees[i].email}</span>`;
+           html += '</span>';
+           html += '</div>';
+           html += '</div>';
+           html += '</div>';
+       }
+         $("#latest-employees").html(html);
+    }
+</script>
+<style>
+    .display-name h3 {
+      font-weight: lighter;
+      font-size: 35px;
+    }
+    
+    #latest-employees {
+        padding: 0;
+    }
+    
+    #latest-employees .card-panel {
+        margin: 0 0 0.5rem 0;
+    }
+    
+    .avatar {
+        font-weight: lighter;
+        font-size: 20px;
+        padding: 10px;
+        margin-left: -11px;
+        display: flex;
+        position: relative;
+    }
+    
+    .employee-mail {
+        font-weight: lighter;
+        font-size: 15px;
+        font-style: italic;
+    }
+    
+    .employee-profile a {
+        
+      text-decoration: none;
+      color: inherit;
+      font-weight: bold;
+    }
+</style>

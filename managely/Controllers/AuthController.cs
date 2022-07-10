@@ -34,9 +34,12 @@ public class AuthController : Controller
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "Email o contraseña incorrectos" });
+                return BadRequest(
+                    ModelState.SelectMany(x =>
+                        x.Value!.Errors.Select(y => y.ErrorMessage)).ToList()
+                );
             }
-
+            
             Employee? employee = await _unitOfWork.Employees.GetEmployeeByEmail(user.Email);
             if (employee == null) return StatusCode(404, new { message = "Usuario no encontrado" });
             
@@ -50,6 +53,7 @@ public class AuthController : Controller
                 ClaimTypes.Role
             );
             
+            identity.AddClaim(new Claim(ClaimTypes.GivenName, employee.DisplayName));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, employee.EmployeeId.ToString()));
             identity.AddClaim(new Claim(ClaimTypes.Name, employee.Email));
             identity.AddClaim(new Claim(ClaimTypes.Role, employee.Role.Name.ToString()));
@@ -66,11 +70,18 @@ public class AuthController : Controller
                 new AuthenticationProperties { IsPersistent = true }
             );
 
-            return RedirectToAction("Index", "Home");
+            return Ok();
         }
         catch (Exception ex)
         {
             return StatusCode(500, ex.Message);
         }
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Ok();
     }
 }

@@ -9,7 +9,7 @@ namespace Managely.Repository.Repositories
     {
         public EmployeeRepository(ApplicationDbContext context): base(context) { }
         
-        public async Task<IEnumerable<Employee>> GetAllEmployees()
+        public async Task<List<Employee>> GetAllEmployees()
         {
             return await _context.Employees                
                 .Include("Role")
@@ -19,7 +19,7 @@ namespace Managely.Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Employee>> GetAllEmployeesRelationships()
+        public async Task<List<Employee>> GetAllEmployeesRelationships()
         {
             return await _context.Employees
                 .Include("JobPosition")
@@ -28,7 +28,7 @@ namespace Managely.Repository.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Employee>> GetRelatedEmployees(Guid employeeId) => 
+        public async Task<List<Employee>> GetRelatedEmployees(Guid employeeId) => 
             await _context.Employees
                 .Where(e => e!.ReportsToId.Equals(employeeId))                
                 .Include("JobPosition")
