@@ -1,0 +1,82 @@
+﻿@model Managely.Models.ViewModel.EmployeeProfileViewModel
+
+<div class="row grey lighten-3">
+    <div class="col s3"></div>
+    <div class="display-name col s9">
+        <h1>@Model.DisplayName</h1>
+        <h2 style="color: gray">@(Model.JobPosition + " en " + Model.Department)</h2>
+        <ul class="tabs grey lighten-3">
+            <li class="tab col s3"><a class="active" href="#test1">Personal</a></li>
+            <li class="tab col s3"><a href="#test2">Time off</a></li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <div class="info col s3">
+        <div class="avatar">
+            <img alt="" src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="responsive-img circle" />
+        </div>
+        <div class="employee-info hide-on-small-only">
+            <ul class="collection">
+                <li class="collection-item"><div><i class="material-icons">email</i> @Model.Email</div></li>
+                <li class="collection-item"><div><i class="material-icons">local_phone</i> @Model.Phone</div></li>
+                <li class="collection-item"><div><i class="material-icons">location_on</i> @Model.Location</div></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col s9">
+        <div id="test1" class="col s12">
+            @{ await Html.RenderPartialAsync("EmployeeInfo", Model);}
+        </div>
+        <div id="test2" class="col s12">
+            @{ await Html.RenderPartialAsync("EmployeeTimeOffs", Model);}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('.tabs').tabs();
+    });
+</script>
+
+<style>
+    .tabs {
+        margin-top: 20px;
+    }
+    .tabs .tab a{
+        color: #000;
+    }
+    .tabs .tab a:hover {
+        background-color:#eee;
+        color: #d1c4e9;
+    }
+    .tabs .tab a.active {
+        background-color: #ede7f6;
+        color: #b39ddb;
+    }
+    .tabs .indicator {
+        background-color: #9575cd;
+    }
+    .display-name h1 {
+      font-weight: lighter;
+      margin: 0
+    }
+    .display-name h2 {
+      font-weight: lighter;
+      font-size: 35px;
+      margin: 0
+    }
+    .employee-info .collection .material-icons {
+        font-size: 14px;
+    }
+    .employee-info .collection-item div {
+        font-weight: lighter;
+        font-size: 15px;
+    }
+    .avatar {
+        margin-top:  -125px;
+        display: flex;
+        justify-content: center;
+        position:  relative;
+    }
+</style>

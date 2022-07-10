@@ -1,0 +1,58 @@
+<div id="tree"></div>
+<script>
+    $(document).ready(async function () {
+        const employeeRelations = await getAllEmployeeRelations();
+        
+        OrgChart.templates.cool = Object.assign({}, OrgChart.templates.ana);
+        OrgChart.templates.cool.defs = '<filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="cool-shadow"><feOffset dx="0" dy="4" in="SourceAlpha" result="shadowOffsetOuter1" /><feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1" /><feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" in="shadowBlurOuter1" type="matrix" result="shadowMatrixOuter1" /><feMerge><feMergeNode in="shadowMatrixOuter1" /><feMergeNode in="SourceGraphic" /></feMerge></filter>';
+        
+        OrgChart.templates.cool.size = [310, 190];
+        OrgChart.templates.cool.node = '<rect filter="url(#cool-shadow)"  x="0" y="0" height="190" width="310" fill="#ffffff" stroke-width="1" stroke="#eeeeee" rx="10" ry="10"></rect><rect fill="#ffffff" x="100" y="10" width="200" height="100" rx="10" ry="10" filter="url(#cool-shadow)"></rect><rect stroke="#eeeeee" stroke-width="1" x="10" y="120" width="290" fill="#ffffff" rx="10" ry="10" height="60"></rect>';
+        
+        OrgChart.templates.cool.img = '<clipPath id="{randId}"><rect  fill="#ffffff" stroke="#039BE5" stroke-width="5" x="10" y="10" rx="10" ry="10" width="80" height="100"></rect></clipPath><image preserveAspectRatio="xMidYMid slice" clip-path="url(#{randId})" xlink:href="{val}" x="10" y="10"  width="80" height="100"></image><rect fill="none" stroke="#9575cd" stroke-width="2" x="10" y="10" rx="10" ry="10" width="80" height="100"></rect>';
+        
+        OrgChart.templates.cool.name = '<text  style="font-size: 18px;" fill="#afafaf" x="110" y="30">{val}</text>';
+        OrgChart.templates.cool.title = '<text  style="font-size: 14px;" fill="#9575cd" x="20" y="145">{val}</text>';
+        OrgChart.templates.cool.title2 = '<text style="font-size: 14px;" fill="#afafaf" x="20" y="165">{val}</text>';        
+        OrgChart.templates.cool.email = '<text style="font-size: 16px;font-style:italic" fill="#afafaf" x="110" y="55" >{val}</text>';
+
+        
+        const chart = new OrgChart(document.getElementById('tree'), {
+            template: "cool",
+            enableSearch: false,
+            mouseScrool: OrgChart.none,
+            nodeMouseClick: OrgChart.action.expandCollapse,
+            scaleInitial: OrgChart.match.boundary,
+            nodeBinding: {
+                name: "name",
+                title: "jobPosition",
+                title2: "department",                
+                img: "img",
+                email: "email",
+            },
+        });
+        
+        chart.load(employeeRelations.map(employeeRelation => {
+           return {
+               id: employeeRelation.employeeId,
+               img: "http://ssl.gstatic.com/accounts/ui/avatar_2x.png",
+               department: employeeRelation.department,
+               jobPosition: employeeRelation.jobPosition,
+               name: employeeRelation.displayName,
+               email: employeeRelation.email,
+               pid: employeeRelation.reportTo,
+           };
+       }))
+    });
+    
+    async function getAllEmployeeRelations() {
+        return $.ajax({
+            url: "/api/employees/relationships",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                return data;
+            },
+        })
+    }
+</script>

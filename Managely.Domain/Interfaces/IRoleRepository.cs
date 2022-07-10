@@ -4,6 +4,7 @@ namespace Managely.Domain.Interfaces
 {
     public interface IRoleRepository : IGenericRepository<Role>
     {
-        public Task<Role?> GetByValue(RoleName role);
+        Task<Role?> GetByValue(RoleName role);
+        Task<List<RolePermission>> GetRolePermissions(RoleName role);
     }
 }

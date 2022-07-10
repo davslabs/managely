@@ -13,5 +13,11 @@ namespace Managely.Repository.Repositories
         {
             return await _context.Roles.Where(r => r.Name.Equals(role)).FirstOrDefaultAsync();
         }
+        
+        public async Task<List<RolePermission>> GetRolePermissions(RoleName role) => 
+            await _context.RolePermissions
+                .Include("Role")
+                .Include("Permission")
+                .Where(p => p.Role.Name.Equals(role)).ToListAsync();
     }
 }

@@ -46,7 +46,7 @@ namespace Managely.Controllers
 
                 _unitOfWork.Complete();
 
-                return Ok("Updated");
+                return Ok();
             } 
             catch(Exception ex)
             {

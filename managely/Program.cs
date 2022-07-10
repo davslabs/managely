@@ -1,9 +1,9 @@
 using Managely.Repository.Shared;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRepository();
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
@@ -13,7 +13,20 @@ builder.Services.AddControllersWithViews()
     });
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options =>
+{
+    options.LoginPath = "/Auth/Login";
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,10 +45,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCookiePolicy();
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
 
 app.Run();
