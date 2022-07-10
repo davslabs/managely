@@ -102,8 +102,9 @@ namespace Managely.Controllers
 
                 _unitOfWork.Employees.Update(employee);
                 _unitOfWork.Complete();
-
-                return Ok("Updated");
+                
+                
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -147,6 +148,29 @@ namespace Managely.Controllers
                 return Ok(relatedEmployees);
             }
             catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        
+        [HttpGet]
+        [Route("relationships")]
+        public async Task<IActionResult> GetAllRelatedEmployees()
+        {
+            try
+            {
+                IEnumerable<Employee> employees = await _unitOfWork.Employees.GetAllEmployeesRelationships();
+                HashSet<EmployeeRelationsViewModel> relatedEmployees = new HashSet<EmployeeRelationsViewModel>();
+
+                foreach (var employee in employees)
+                {
+                    var employeeProfile = _mapper.Map<EmployeeRelationsViewModel>(employee);
+                    relatedEmployees.Add(employeeProfile);
+                }
+
+                return Ok(relatedEmployees);
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }

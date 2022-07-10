@@ -1,0 +1,484 @@
+@model Managely.Models.ViewModel.EmployeeProfileViewModel
+
+<input type="hidden" name="EmployeeId" value="@Model.EmployeeId" />
+
+<div class="row">
+    <div class="col s12">
+        <div class="holidays-heading">
+            <i class="material-icons next-holidays">date_range</i>
+            <span class="title">
+                Dias empleados
+            </span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s4">
+        <div class="card horizontal z-depth-1">
+            <div class="card-stacked">
+                <div class="vacation card-content center">        
+                    <i class="material-icons">flight</i>
+                    <p class="flow-text">                        
+                        Vacaciones
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s4">
+        <div class="card horizontal z-depth-1">
+            <div class="card-stacked">
+                <div class="sickness card-content center">
+                    <i class="material-icons">hotel</i>
+                    <p class="flow-text">
+                        Enfermedad
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col s4">
+        <div class="card horizontal z-depth-1">
+            <div class="card-stacked">
+                <div class="studyday card-content center">        
+                    <i class="material-icons">collections_bookmark</i>
+                    <p class="flow-text">
+                        Estudio
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display: none" id="timeoff-section">
+   <div class="row">
+       <div class="col s12">
+           <div class="holidays-heading">
+               <i class="material-icons next-holidays">date_range</i>
+               <span class="title">
+                   Ultimos Dias cargados
+               </span>
+           </div>
+       </div>
+   </div>
+   <div class=row>
+       <div class="col s12">
+           <table id="timeoff-table" class="striped centered">
+               <thead>
+                   <th>Desde</th>
+                   <th>Hasta</th>
+                   <th>Motivo</th>        
+               </thead>
+           </table>
+       </div>
+   </div> 
+</div>
+<div class="row">
+    <div class="col s12">
+        <div class="holidays-heading">
+            <i class="material-icons next-holidays">watch_later</i>
+            <span class="title">
+                Próximos feriados
+            </span>
+        </div>
+        <ul class="collection holidays"></ul>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        <div class="holidays-heading">
+            <i class="material-icons next-holidays">event_available</i>
+            <span class="title">
+                Cargar dias fuera de oficina
+            </span>
+        </div>
+    </div>
+</div>
+<form id="addTimeOff">
+    <section id="search_engine">
+        <div class="se-engine">
+            <div class="row">
+                <div class="col s8 special-pad">
+                    <div class="row">
+                        <div class="col s9">
+                            <div class="col s6 l-bord">
+                                <label>Desde</label>
+                                <input type="text" class="datepicker" id="from">
+                            </div>
+
+                            <div class="col s6 l-bord">
+                                <label>Hasta</label>
+                                <input type="text" class="datepicker" id="to">
+                            </div>
+                        </div>
+                        <div class="col s3">
+                            <label>Motivo</label>
+                            <select id="reason">
+                                <option selected value="Vacation">Vacaciones</option>
+                                <option value="StudyDay">Estudio</option>
+                                <option value="Sickness">Enfermedad</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col s3 bg-green valign-wrapper right" style="margin-top:25px;">
+                    <button onclick="addTimeOff()" type="button" name="search" class="btn btn-green center-align">Cargar<i class="material-icons right">file_upload</i></button>
+                </div>
+
+            </div>
+        </div>
+    </section>                    
+</form>
+
+<script>
+$(document).ready(async function() {
+    const timeoffs = await getEmployeeTimeOffs();
+    const holidays = await getHolidays();
+    
+    await populateHolidays(holidays);    
+    setTimeOffCounters(timeoffs);
+    if (timeoffs.length > 0) {
+        $('#timeoff-section').show();
+        loadTable(timeoffs);
+    }
+    const $from = $("#from").datepicker(optionsFrom);
+	const $to = $("#to").datepicker(optionsTo);
+});
+
+function getEmployeeTimeOffs() {
+    return new Promise(async function(resolve, reject) {
+        $.ajax({
+            url: `/api/employees/@Model.EmployeeId/time-off`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            },
+            error: function(data) {
+                reject(data);
+            }
+        });
+    });
+}
+
+function setTimeOffCounters(timeOffs) {
+    const counters = {
+        Vacation: 0,
+        StudyDay: 0,
+        Sickness: 0
+    };
+
+    const grouped = groupBy(timeOffs, 'reason');
+
+    for(const timeOffs of Object.values(grouped)) {
+        const reason = timeOffs[0].reason;
+        counters[reason] = calculateAmountOfTimeOffDays(timeOffs);
+    }
+
+    Object.keys(counters).forEach(function(key) {
+        const p = document.createElement('p');
+        p.innerText = `${counters[key]} dias empleados`;
+        $(`.${key.toLowerCase()}`).append(p);
+    });
+}
+
+function loadTable(timeOffs) {
+    const table = $('#timeoff-table');
+    const tbody = document.createElement('tbody');
+    table.append(tbody);
+    timeOffs.slice(-3).forEach(function(timeOff) {
+        const tr = document.createElement('tr');
+        const tdFrom = document.createElement('td');
+        const tdTo = document.createElement('td');
+        const tdReason = document.createElement('td');
+        tdFrom.innerText = new Date(timeOff.fromDate).toLocaleDateString('es-ES', {day: '2-digit', month: '2-digit', year: 'numeric'});
+        tdTo.innerText = new Date(timeOff.thruDate).toLocaleDateString('es-ES', {day: '2-digit', month: '2-digit', year: 'numeric'});
+        tdReason.innerText = timeOff.reason === 'Vacation' ? 'Vacaciones' : timeOff.reason === 'StudyDay' ? 'Estudio' : 'Enfermedad';
+        tr.append(tdFrom);
+        tr.append(tdTo);
+        tr.append(tdReason);
+        tbody.append(tr);
+    });
+}
+
+function addTimeOff()  {
+    const employeeId = $('input[name="EmployeeId"]').val();
+    const from = $("#from").val();
+    const to = $("#to").val();
+    const reason = $("#reason").val();
+    const data = {
+        fromDate: new Date(from),
+        thruDate: new Date(to),
+        reason: reason     
+    }
+
+    $.ajax({
+        url: `/api/employees/${employeeId}/time-off`,
+        type: 'POST',
+        data: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        success: function(data) {
+            const toastHTML = "<span>Dias fuera de oficina cargados</span>";
+            M.toast({html: toastHTML, classes: 'green'});
+            setTimeout(function() {
+                location.reload();
+            }, 2000);          
+        },
+        error: function(data) {
+            const toastHTML = "<span>Error al cargar dias fuera de oficina</span>";
+            M.toast({html: toastHTML, classes: 'red'});
+        }
+    });
+}
+
+function calculateAmountOfTimeOffDays(timeOffs) {
+    let amount = 0;
+    
+    timeOffs.forEach(timeOff => {
+        const timeOffStart = new Date(timeOff.fromDate);
+        const timeOffEnd = new Date(timeOff.thruDate);
+        const timeDiff = timeOffEnd.getTime() - timeOffStart.getTime();
+        const timeOffDays = timeDiff / (1000 * 3600 * 24);
+        amount += timeOffDays;                
+    });
+
+    return amount;
+}
+
+function getHolidays() {
+    const year = new Date().getFullYear();
+    return new Promise(async function(resolve, reject) {
+        $.ajax({
+            url: 'http://nolaborables.com.ar/api/v2/feriados/' + year,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            },
+            error: function(data) {
+                reject(data);
+            }
+        });
+    });
+}
+
+function populateHolidays(data) {
+    const holidays = [];
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    data.forEach(holiday => {
+        const holidayMonth = holiday.mes - 1;
+        if (currentMonth <= holidayMonth) {
+            currentDate.setMonth(holidayMonth);
+            let month = currentDate.toLocaleDateString('es-AR', {month: 'long'});
+            month = month.charAt(0).toUpperCase() + month.slice(1);
+            holidays.push({
+                date: holiday.dia + ' ' + month,
+                description: holiday.motivo
+            });
+        }
+    });
+    
+    setHolidays(holidays);
+}
+    
+function setHolidays(holidays) {
+    const collection = $('.holidays');
+    holidays.slice(0, 5).forEach(holiday => {
+        const li = document.createElement('li');
+        li.classList.add('collection-item');
+        li.innerHTML = `
+            <i class="material-icons next-holidays">event</i>
+            <span class="holiday-title ">${holiday.date}</span>
+            <p>${holiday.description}</p>
+        `;
+        collection.append(li);
+    });
+}
+
+function groupBy(array, property) {
+    const hash = {};
+    for (let i = 0; i < array.length; i++) {
+        if (!hash[array[i][property]]) hash[array[i][property]] = [];
+        hash[array[i][property]].push(array[i]);
+    }
+    return hash;
+}
+
+// Spanish overwrite
+inter_es = {
+	cancel: "Cancelar",
+	done: "Ok",
+	months: [
+		"Enero",
+		"Febrero",
+		"Marzo",
+		"Abril",
+		"Mayo",
+		"Junio",
+		"Julio",
+		"Agosto",
+		"Septiembre",
+		"Octubre",
+		"Noviembre",
+		"Diciembre"
+	],
+	monthsShort: [
+		"Ene",
+		"Feb",
+		"Mar",
+		"Abr",
+		"May",
+		"Jun",
+		"Jul",
+		"Ago",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dic"
+	],
+	weekdays: [
+		"Domingo",
+		"Lunes",
+		"Martes",
+		"Miércoles",
+		"Jueves",
+		"Viernes",
+		"Sábado"
+	],
+	weekdaysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+	weekdaysAbbrev: ["D", "L", "M", "M", "J", "V", "S"]
+};
+
+// Create default dates
+const date = new Date();
+// set default date for #from (1 week from today)
+const nextWeekFrom = new Date(date.setDate(date.getDate() + 7));
+// Default date for #to
+const nextWeekTo = new Date(date.setDate(nextWeekFrom.getDate() + 7));
+//Set min date for #to
+const minDateTo = new Date(date.setDate(nextWeekFrom.getDate() + 1));
+
+
+// SET OPTIONS FOR FROM DATEPICKER
+const optionsFrom = {
+	i18n: inter_es,
+	minDate: new Date(),
+	defaultDate: new Date(nextWeekFrom),
+	setDefaultDate: true,
+	autoClose: true,
+	onSelect: function(el) {
+		const ell = new Date(el);
+		const setMM = ell.getDate() + 1;
+		const setM = new Date(ell.setDate(setMM));
+		setMinTo(setM);
+	}
+};
+
+
+// SET OPTIONS FOR TO DATEPICKER
+const optionsTo = {
+	i18n: inter_es,
+	minDate: new Date(minDateTo),
+	defaultDate: new Date(nextWeekTo),
+	setDefaultDate: true,
+	autoClose: true
+};
+
+// FUNCTION TO SET MINIMUM DATE WHEN FROM DATE SELECTED
+const setMinTo = function(vad) {
+	// Get the current date set on #to datepicker
+	const instance = M.Datepicker.getInstance($("#to"));
+	instance.options.minDate = vad;
+
+	// Check if the #from date is greater than the #to date and modify by 1 day if true.
+	if (new Date(instance) < vad) {
+		instance.setDate(vad);
+		$("#to").val(instance.toString());
+	}
+};
+
+$("select").formSelect();
+
+</script>
+
+<style>
+    .holidays li {
+        line-height: 0.5rem !important;
+    }
+    .holiday-title {
+        font-size: 1rem;
+        font-weight: bold;
+        line-height: 24px;
+    }
+    .title {
+        font-size: 1.25rem !important;;
+        font-weight: bold !important;;
+        line-height:24px;
+    }
+    .collection-item p {
+        font-style: italic !important;
+        font-size: 0.8rem !important;;
+    }
+    .next-holidays {
+        display: inline-flex;
+        vertical-align: top;
+    }
+    .collection {
+        margin: 0!important;;
+        padding: 0!important;
+        border: 0!important;
+        box-shadow: none!important;
+        background: #fff;
+    }
+    .holidays-heading {
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .holidays .collection-item {
+        padding-top: 15px;
+    }
+    #search_engine{
+	
+   .se-engine{
+      position: relative;
+		 background: white;
+      z-index: 10;
+      width: 850px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.3);
+      .special-pad{
+         padding-top: 1.5rem;
+         padding-bottom: 1.5rem;
+         height: 120px;
+      }
+      .l-bord{
+				padding-left: 20px;
+         border-right: 1px solid #ccc;
+      }
+      input{
+         border-bottom: none;
+				font-size: 1.4rem;
+				cursor: pointer;
+      }
+		 select{
+			 text-align: center;
+		 }
+      .row{
+         margin-bottom: 0px;
+      }
+      .bg-green{
+         height: 120px;
+         .btn{
+            margin: 0 auto;
+         }
+      }
+   }
+}
+</style>

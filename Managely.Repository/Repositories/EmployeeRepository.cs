@@ -11,16 +11,29 @@ namespace Managely.Repository.Repositories
         
         public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
-            return await _context.Employees.Include(e => e!.Role).ToListAsync();
-        }
-
-        public async Task<IEnumerable<Employee>> GetRelatedEmployees(Guid employeeId) => 
-            await _context.Employees
-                .Where(e => e!.ReportsToId.Equals(employeeId))
+            return await _context.Employees                
                 .Include("Role")
                 .Include("EmployeeTimeOffs")
                 .Include("JobPosition")
                 .Include("Department")
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Employee>> GetAllEmployeesRelationships()
+        {
+            return await _context.Employees
+                .Include("JobPosition")
+                .Include("Department")
+                .Include("ReportsTo")
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Employee>> GetRelatedEmployees(Guid employeeId) => 
+            await _context.Employees
+                .Where(e => e!.ReportsToId.Equals(employeeId))                
+                .Include("JobPosition")
+                .Include("Department")
+                .Include("ReportsTo")
                 .ToListAsync();
 
         public async Task<Employee?> GetEmployeeById(Guid employeeId) =>
@@ -29,17 +42,21 @@ namespace Managely.Repository.Repositories
                 .Include("EmployeeTimeOffs")
                 .Include("JobPosition")
                 .Include("Department")
+                .Include("ReportsTo")
                 .FirstOrDefaultAsync(e => e!.EmployeeId.Equals(employeeId));
 
+        public async Task<Employee?> GetEmployeeByEmail(string email) =>
+            await _context.Employees
+                .Include("Role")
+                .FirstOrDefaultAsync(e => e!.Email.ToLower().Equals(email.ToLower().Trim()));
+        
         public async Task<ICollection<TimeOff>> GetEmployeeTimeOff(Guid employeeId)
         {
             //Get all time offs from employee
             var employeeTimeOffs =
                 await _context.EmployeeTimeOffs
-                    .Include("Role")
-                    .Include("EmployeeTimeOffs")
-                    .Include("JobPosition")
-                    .Include("Department")
+                    .Include("Employee")
+                    .Include("TimeOff")
                     .Where(et => et.EmployeeId.Equals(employeeId))
                     .ToListAsync();
             

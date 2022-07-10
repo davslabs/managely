@@ -11,6 +11,7 @@ namespace Managely.Domain.Models
         {
             IsActive = true;
             EmployeeTimeOffs = new HashSet<EmployeeTimeOff>();
+            StartDate = DateTime.Now;
         }
 
         [Key]
@@ -19,6 +20,8 @@ namespace Managely.Domain.Models
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
         [Required]
         [DefaultValue(true)]
         public bool IsActive { get; set; }

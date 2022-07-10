@@ -12,6 +12,12 @@ namespace Managely.Profiles
                 .ForMember(dest => dest.EmployeeId,
                     opt => opt.MapFrom(src => $"{src.EmployeeId}")
                 )
+                .ForMember(dest => dest.Name,
+                    opt => opt.MapFrom(src => $"{src.Name}")
+                )
+                .ForMember(dest => dest.LastName,
+                    opt => opt.MapFrom(src => $"{src.LastName}")
+                )
                 .ForMember(
                     dest => dest.DisplayName,
                     opt => opt.MapFrom(src => $"{src.DisplayName}")
@@ -30,21 +36,21 @@ namespace Managely.Profiles
                 )
                 .ForMember(
                     dest => dest.Department,
-                    opt => opt.MapFrom(src => $"{src.Department.Name}")
+                    opt => opt.MapFrom(src => $"{src.Department.Description}")
                 )
                 .ForMember(
                     dest => dest.JobPosition,
-                    opt => opt.MapFrom(src => $"{src.JobPosition.Name}")
+                    opt => opt.MapFrom(src => $"{src.JobPosition.Description}")
                 )
                 .ForMember(
                     dest => dest.Role,
-                    opt => opt.MapFrom(src => $"{src.Role.Name}")
+                    opt => opt.MapFrom(src => $"{src.Role.Description}")
                 )
                 .ForMember(
-                    dest => dest.ReportsToId,
+                    dest => dest.ReportsTo,
                     opt =>
                     {
-                        opt.MapFrom(src => $"{src.ReportsToId}");
+                        opt.MapFrom(src => $"{src.ReportsTo.DisplayName}");
                         opt.PreCondition(src => src.ReportsToId != null);
                 });
         }
