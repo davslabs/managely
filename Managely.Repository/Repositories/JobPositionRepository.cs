@@ -9,6 +9,11 @@ public class JobPositionRepository: GenericRepository<JobPosition>, IJobPosition
 {
     public JobPositionRepository(ApplicationDbContext context) : base(context) { }
 
+    public async Task<List<JobPosition>> GetAllJobPositions()
+    {
+        return await _context.JobPositions.ToListAsync();
+    }
+    
     public async Task<JobPosition?> GetByValue(JobPositionName jobPosition)
     {
         return await _context.JobPositions.FirstOrDefaultAsync(x => x.Name.Equals(jobPosition));

@@ -10,6 +10,7 @@ public class EmployeeRelationsProfile : Profile
     {
         CreateMap<Employee, EmployeeRelationsViewModel>()
             .ForMember(dest => dest.EmployeeId, opt => opt.MapFrom(src => src.EmployeeId))
+            .ForMember(dest => dest.AvatarUrl, opt => opt.MapFrom(src => src.AvatarUrl))
             .ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.DisplayName))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
             .ForMember(dest => dest.JobPosition, opt => opt.MapFrom(src => src.JobPosition.Description))

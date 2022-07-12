@@ -22,6 +22,9 @@ namespace Managely.Domain.Models
         public string Password { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
+        
+        public string AvatarUrl { get; set; }
+        
         [Required]
         [DefaultValue(true)]
         public bool IsActive { get; set; }

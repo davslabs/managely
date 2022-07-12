@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Managely.Repository.Migrations
 {
-    public partial class createtables : Migration
+    public partial class CreateTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -84,6 +84,7 @@ namespace Managely.Repository.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     JobPositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DepartmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -177,13 +178,13 @@ namespace Managely.Repository.Migrations
                 columns: new[] { "DepartmentId", "Description", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("104e3817-f5db-4827-8874-70ccebe8ef45"), "Recursos Humanos", "HumanResources" },
-                    { new Guid("2038d67f-3cb7-4a07-add8-e69c9dea629c"), "Comité de Gobernación", "Board" },
-                    { new Guid("314b9b19-763e-4065-888f-aa5ba38b3f7a"), "Finanzas", "Finance" },
-                    { new Guid("7634e360-6477-4775-9990-7de1cff73cc1"), "Ventas", "Sales" },
-                    { new Guid("c3f9f08c-bca7-4f15-ab75-686ebfd39b37"), "Marketing", "Marketing" },
-                    { new Guid("cbba8167-0f34-4de3-86c9-687d7ecbcddf"), "Servicio al Cliente", "CustomerService" },
-                    { new Guid("e222d8fc-69b6-47da-a94e-9d6c6b017278"), "IT", "IT" }
+                    { new Guid("0fb22393-69e8-47be-8fd3-7a8306e43c96"), "Recursos Humanos", "HumanResources" },
+                    { new Guid("186c9446-cb0b-4db9-a216-fb5ff6c40e4f"), "Marketing", "Marketing" },
+                    { new Guid("41f73399-28d0-4538-ae7a-84bc7a63b283"), "Finanzas", "Finance" },
+                    { new Guid("4290bfc8-c384-4170-8143-262f2e548577"), "IT", "IT" },
+                    { new Guid("4a82fd01-2301-4115-8d26-74168675aadd"), "Servicio al Cliente", "CustomerService" },
+                    { new Guid("7985a54b-9fe4-44eb-b8ea-25f047d2c970"), "Comité de Gobernación", "Board" },
+                    { new Guid("a35650f2-5146-4263-b042-5755db7d2954"), "Ventas", "Sales" }
                 });
 
             migrationBuilder.InsertData(
@@ -191,10 +192,10 @@ namespace Managely.Repository.Migrations
                 columns: new[] { "JobPositionId", "Description", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("5cc7f86c-2490-4a77-8dc2-cca090c5c917"), "Gerente", "Manager" },
-                    { new Guid("81655a6c-f0a6-4f85-8a9e-2cbf65f58ac5"), "Staff", "Staff" },
-                    { new Guid("8ae3a1f7-e20b-4321-af64-5f1ffc7673c8"), "Lider", "Head" },
-                    { new Guid("934fe9d3-13c5-4c99-8c67-92c518faf9de"), "CEO", "CEO" }
+                    { new Guid("1a524604-9312-4d77-af7a-82070da3a447"), "Gerente", "Manager" },
+                    { new Guid("a307c0b9-d8d0-484f-8f44-c64a6530060a"), "Staff", "Staff" },
+                    { new Guid("ae475304-61fd-4e64-a000-089419f05c43"), "CEO", "CEO" },
+                    { new Guid("c789d06e-3e1d-4b54-a7c8-94c40532f8b3"), "Lider", "Head" }
                 });
 
             migrationBuilder.InsertData(
@@ -202,10 +203,10 @@ namespace Managely.Repository.Migrations
                 columns: new[] { "PermissionId", "Description", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("0bf24c64-faff-4c70-a5f6-b39ad14d1893"), "Eliminar", "Delete" },
-                    { new Guid("2c4c534f-7413-4f74-a716-becd91bdea86"), "Editar", "Update" },
-                    { new Guid("37536f0d-2cfd-4c7c-9f0f-ec4e118ed7e5"), "Crear", "Create" },
-                    { new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"), "Leer", "Read" }
+                    { new Guid("0a26a041-2921-468a-b68f-2f9175e2224c"), "Eliminar", "Delete" },
+                    { new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"), "Leer", "Read" },
+                    { new Guid("b5ccdf0a-6887-4616-b2a1-6285a5a8c235"), "Editar", "Update" },
+                    { new Guid("ca9b2b73-4235-42eb-9a3b-f1adc216b77b"), "Crear", "Create" }
                 });
 
             migrationBuilder.InsertData(
@@ -213,9 +214,9 @@ namespace Managely.Repository.Migrations
                 columns: new[] { "RoleId", "Description", "Name", "isEnabled" },
                 values: new object[,]
                 {
-                    { new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713"), "Admin", "Admin", true },
-                    { new Guid("71277fc9-eed2-4296-8526-452376d76b21"), "Manager", "Manager", true },
-                    { new Guid("c7730fd5-0520-4eb3-8857-ba673e55f3b2"), "Staff", "Staff", true }
+                    { new Guid("8b8fdb6d-69ed-4bea-96d5-45147873cddb"), "Staff", "Staff", true },
+                    { new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee"), "Admin", "Admin", true },
+                    { new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944"), "Manager", "Manager", true }
                 });
 
             migrationBuilder.InsertData(
@@ -223,15 +224,15 @@ namespace Managely.Repository.Migrations
                 columns: new[] { "RolePermissionId", "PermissionId", "RoleId" },
                 values: new object[,]
                 {
-                    { new Guid("32e34e30-4736-4c6a-8127-d72a0131429c"), new Guid("37536f0d-2cfd-4c7c-9f0f-ec4e118ed7e5"), new Guid("71277fc9-eed2-4296-8526-452376d76b21") },
-                    { new Guid("42e5e386-9b0d-4525-af81-91308abc7f3f"), new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"), new Guid("71277fc9-eed2-4296-8526-452376d76b21") },
-                    { new Guid("5e18e688-9e7e-4907-898f-9b005547e499"), new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"), new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713") },
-                    { new Guid("62f770a8-3e8c-4699-aab0-07188b7fb98e"), new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"), new Guid("c7730fd5-0520-4eb3-8857-ba673e55f3b2") },
-                    { new Guid("74d0d4b4-28f3-4586-8a24-9292e1289546"), new Guid("37536f0d-2cfd-4c7c-9f0f-ec4e118ed7e5"), new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713") },
-                    { new Guid("806202b5-1878-482c-bcd1-dc85e727999a"), new Guid("2c4c534f-7413-4f74-a716-becd91bdea86"), new Guid("71277fc9-eed2-4296-8526-452376d76b21") },
-                    { new Guid("c3a7cea6-5331-4819-ba05-621f69d3e805"), new Guid("0bf24c64-faff-4c70-a5f6-b39ad14d1893"), new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713") },
-                    { new Guid("c3e41618-bc75-4135-ab5f-35e25afde882"), new Guid("2c4c534f-7413-4f74-a716-becd91bdea86"), new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713") },
-                    { new Guid("ee36c83c-046f-484f-be1e-f44df5473c25"), new Guid("0bf24c64-faff-4c70-a5f6-b39ad14d1893"), new Guid("71277fc9-eed2-4296-8526-452376d76b21") }
+                    { new Guid("01770bbe-eff2-4042-85bb-b826a7ed1dfe"), new Guid("0a26a041-2921-468a-b68f-2f9175e2224c"), new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee") },
+                    { new Guid("0c0be631-f3e5-4390-8e9d-4428f35aaf89"), new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"), new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee") },
+                    { new Guid("335f1cf0-c0fe-4710-b3cd-525912492a0a"), new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"), new Guid("8b8fdb6d-69ed-4bea-96d5-45147873cddb") },
+                    { new Guid("65197d0d-8cf3-43f4-8df3-a9c1602bee63"), new Guid("b5ccdf0a-6887-4616-b2a1-6285a5a8c235"), new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee") },
+                    { new Guid("84626364-32d9-45b6-8a56-cbaa4f72e47d"), new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"), new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944") },
+                    { new Guid("a233ea90-00e2-4838-b90b-f3b1b8c22ce8"), new Guid("b5ccdf0a-6887-4616-b2a1-6285a5a8c235"), new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944") },
+                    { new Guid("e23b0d0a-946d-48ca-930c-38279c55e77e"), new Guid("0a26a041-2921-468a-b68f-2f9175e2224c"), new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944") },
+                    { new Guid("f65bad2e-87b0-4be1-acda-ba82b4c88a65"), new Guid("ca9b2b73-4235-42eb-9a3b-f1adc216b77b"), new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944") },
+                    { new Guid("fa171399-152c-46f6-83f1-ea7c09a65a9f"), new Guid("ca9b2b73-4235-42eb-9a3b-f1adc216b77b"), new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee") }
                 });
 
             migrationBuilder.CreateIndex(

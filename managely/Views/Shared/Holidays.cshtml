@@ -1,0 +1,60 @@
+<ul class="collection with-header holidays">
+    <li class="collection-header grey lighten-5"><h6>Próximos feriados</h6></li>
+</ul>
+
+<script>
+$(document).ready(async function () {
+    const holidays = await getHolidays();     
+    await populateHolidays(holidays);    
+});
+function populateHolidays(data) {
+    const holidays = [];
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    data.forEach(holiday => {
+        const holidayMonth = holiday.mes - 1;
+        if (currentMonth <= holidayMonth) {
+            currentDate.setMonth(holidayMonth);
+            let month = currentDate.toLocaleDateString('es-AR', {month: 'long'});
+            month = month.charAt(0).toUpperCase() + month.slice(1);
+            holidays.push({
+                date: holiday.dia + ' ' + month,
+                description: holiday.motivo
+            });
+        }
+    });
+    
+    setHolidays(holidays);
+}
+    
+function setHolidays(holidays) {
+    const collection = $('.holidays');
+    holidays.slice(0, 5).forEach(holiday => {
+        const li = document.createElement('li');
+        li.classList.add('collection-item');
+        li.innerHTML = `
+            <i class="material-icons next-holidays">event</i>
+            <span class="holiday-title ">${holiday.date}</span>
+            <p>${holiday.description}</p>
+        `;
+        collection.append(li);
+    });
+}
+
+function getHolidays() {
+    const year = new Date().getFullYear();
+    return new Promise(async function(resolve, reject) {
+        $.ajax({
+            url: 'http://nolaborables.com.ar/api/v2/feriados/' + year,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            },
+            error: function(data) {
+                reject(data);
+            }
+        });
+    });
+}
+</script>

@@ -12,6 +12,8 @@ namespace Managely.Profiles
                 .ForMember(dest => dest.EmployeeId,
                     opt => opt.MapFrom(src => $"{src.EmployeeId}")
                 )
+                .ForMember(dest => dest.StartDate, 
+                    opt => opt.MapFrom(src => src.StartDate.ToString("MM/dd/yyyy")))
                 .ForMember(dest => dest.Name,
                     opt => opt.MapFrom(src => $"{src.Name}")
                 )
@@ -21,6 +23,9 @@ namespace Managely.Profiles
                 .ForMember(
                     dest => dest.DisplayName,
                     opt => opt.MapFrom(src => $"{src.DisplayName}")
+                )
+                .ForMember(dest => dest.AvatarUrl,
+                    opt => opt.MapFrom(src => $"{src.AvatarUrl}")
                 )
                 .ForMember(
                     dest => dest.Email,
@@ -52,7 +57,7 @@ namespace Managely.Profiles
                     {
                         opt.MapFrom(src => $"{src.ReportsTo.DisplayName}");
                         opt.PreCondition(src => src.ReportsToId != null);
-                });
+                    });
         }
     }
 }

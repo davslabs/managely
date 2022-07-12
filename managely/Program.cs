@@ -1,10 +1,14 @@
 using Managely.Repository.Shared;
 using System.Text.Json.Serialization;
+using Managely.Providers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRepository();
+
+builder.Services.AddTransient<ICloudinaryProvider, CloudinaryProvider>();
+
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options =>
     {

@@ -1,8 +1,8 @@
 ﻿@model Managely.Models.ViewModel.EmployeeProfileViewModel
 
 <div class="row grey lighten-3">
-    <div class="col s3"></div>
-    <div class="display-name col s9">
+    <div class="col s3 hide-on-small-only"></div>
+    <div class="display-name col s12 l9">
         <h1>@Model.DisplayName</h1>
         <h2 style="color: gray">@(Model.JobPosition + " en " + Model.Department)</h2>
         <ul class="tabs grey lighten-3">
@@ -12,9 +12,9 @@
     </div>
 </div>
 <div class="row">
-    <div class="info col s3">
-        <div class="avatar">
-            <img alt="" src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="responsive-img circle" />
+    <div class="info col s12 l3">
+        <div class="avatar hide-on-small-only">
+            <img alt="" style="width:250px;height:250px;" src="@Model.AvatarUrl" class="responsive-img circle" />
         </div>
         <div class="employee-info hide-on-small-only">
             <ul class="collection">
@@ -24,7 +24,7 @@
             </ul>
         </div>
     </div>
-    <div class="col s9">
+    <div class="col s12 l9">
         <div id="test1" class="col s12">
             @{ await Html.RenderPartialAsync("EmployeeInfo", Model);}
         </div>

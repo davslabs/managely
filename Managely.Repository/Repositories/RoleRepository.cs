@@ -8,6 +8,11 @@ namespace Managely.Repository.Repositories
     public class RoleRepository: GenericRepository<Role>, IRoleRepository
     {
         public RoleRepository(ApplicationDbContext context): base(context) { }
+        
+        public async Task<List<Role>> GetAllRoles()
+        {
+            return await _context.Roles.ToListAsync();
+        }
 
         public async Task<Role?> GetByValue(RoleName role)
         {

@@ -1,0 +1,37 @@
+@model IEnumerable<Managely.Models.ViewModel.CollaboratorViewModel>
+
+<table id="collaborators-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Puesto</th>
+        <th>Departamento</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var employee in Model)
+    {
+        <tr>
+            <td><img style="width:45px;height:45px;" src="@employee.AvatarUrl" 
+                     alt="" class="hide-on-small-only z-depth-2 circle responsive-img" /></td>
+            <td>@employee.DisplayName</td>
+            <td>@employee.Email</td>
+            <td>@employee.JobPosition</td>
+            <td>@employee.Department</td>
+            <td><a href="@Url.Action("GetEmployeeProfile","Employee", new { employeeId = employee.EmployeeId })" 
+                   class="btn-floating btn-small waves-effect waves-light deep-purple lighten-3"><i class="material-icons">create</i></a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+<script>
+$(document).ready(function () {
+     $('#collaborators-table').DataTable({
+                responsive: true
+            });
+    $('select').formSelect();
+})
+</script>

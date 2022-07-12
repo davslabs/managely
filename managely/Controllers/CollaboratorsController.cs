@@ -3,7 +3,6 @@ using Managely.Domain.Interfaces;
 using Managely.Domain.Models;
 using Managely.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace Managely.Controllers;
 
@@ -11,7 +10,9 @@ public class CollaboratorsController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    public CollaboratorsController(IUnitOfWork unitOfWork, IMapper mapper)
+    public CollaboratorsController(
+        IUnitOfWork unitOfWork, 
+        IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -24,14 +25,33 @@ public class CollaboratorsController : Controller
         IEnumerable<CollaboratorViewModel> collaborators = _mapper.Map<IEnumerable<CollaboratorViewModel>>(employees);
         return View(collaborators);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> AddNewEmployee()
+    {
+        List<Employee> employees = await _unitOfWork.Employees.GetAllEmployees();
+        List<EmployeeProfileViewModel> evm = _mapper.Map<List<EmployeeProfileViewModel>>(employees);
+        List<Role> roles = await _unitOfWork.Roles.GetAllRoles();
+        List<RoleViewModel> rvm = _mapper.Map<List<RoleViewModel>>(roles);
+        List<Department> departments = await _unitOfWork.Departments.GetAllDepartments();
+        List<DepartmentViewModel> dvm = _mapper.Map<List<DepartmentViewModel>>(departments);
+        List<JobPosition> jobPositions = await _unitOfWork.JobPositions.GetAllJobPositions();
+        List<JobPositionViewModel> jvm = _mapper.Map<List<JobPositionViewModel>>(jobPositions);
+        
+        AddCollaboratorViewModel acvm = new AddCollaboratorViewModel
+        {
+            Employees = evm,
+            Roles = rvm,
+            Departments = dvm,
+            JobPositions = jvm
+        };
+        
+        return PartialView("AddCollab", acvm);
+    }
 
     [HttpGet]
-    public async Task<IActionResult> GetEmployeeProfile([Required] Guid employeeId)
+    public IActionResult Organization()
     {
-        Employee? employee = await _unitOfWork.Employees.GetEmployeeById(employeeId);
-        if (employee == null) throw new InvalidOperationException("El empleado no existe");
-        EmployeeProfileViewModel evm = _mapper.Map<EmployeeProfileViewModel>(employee);
-
-        return View("Employee", evm);
+        return View("OrgChart");
     }
 }

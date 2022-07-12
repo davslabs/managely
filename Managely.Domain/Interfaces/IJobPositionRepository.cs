@@ -4,5 +4,6 @@ namespace Managely.Domain.Interfaces;
 
 public interface IJobPositionRepository: IGenericRepository<JobPosition>
 {
-    public Task<JobPosition?> GetByValue(JobPositionName jobPosition);
+    Task<List<JobPosition>> GetAllJobPositions();
+    Task<JobPosition?> GetByValue(JobPositionName jobPosition);
 }

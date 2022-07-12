@@ -14,7 +14,7 @@
                         <img alt=""
                              height="120"
                              width="120"
-                             src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                             src="@Model.AvatarUrl"
                              class="responsive-img circle"/>
                         
                     </div>
@@ -23,29 +23,21 @@
                             @Model.DisplayName <br/>
                             <span class="employee-mail truncate">@Model.Email</span>
                             <span class="employee-profile">
-                                <a href="@Url.Action("GetEmployeeProfile", "Collaborators", new { employeeId = Model.EmployeeId })">
+                                <a href="@Url.Action("GetEmployeeProfile", "Employee", new { employeeId = Model.EmployeeId })">
                                     Ver perfil
                                 </a>
                             </span>
                         </span>
-                        
                     </div>
+                    
                 </div>
             </div>
         </div>
+         @{ await Html.RenderPartialAsync("Holidays"); }
     </div>
     <div class="col s8">
-
-        <ul class="collapsible">
-            <li class="active">
-                <div class="collapsible-header"><i class="material-icons">contacts</i>Ingresos recientes</div>
-                <div id="latest-employees" class="collapsible-body"></div>
-            </li>
-            <li>
-                <div class="collapsible-header"><i class="material-icons">people</i>Organización</div>
-                <div class="collapsible-body">@{ await Html.RenderPartialAsync("OrgChart"); }</div>
-            </li>
-            
+        <ul id="latest-employees" class="collection with-header">
+            <li class="collection-header grey lighten-5"><h6>Ingresos recientes</h6></li>
         </ul>
     </div>
 </div>
@@ -72,22 +64,16 @@
     function setLatestEmployees(employees) {
        let html = "";
        for(let i = 0; i < employees.length; i++) {
-           html += '<div class="card-panel grey lighten-5">';
-           html += '<div class="row valign-wrapper">';
-           html += '<div class="col s2">';
-           html += '<img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->';
-           html += '</div>';
-           html += '<div class="col s10">';
-           html += '<span class="black-text">';
-           html +=  `<h6>${employees[i].displayName}<h6>`;
-           html += `<span class="employee-mail">${employees[i].jobPosition} en ${employees[i].department}</span><br/>`;
-           html +=  `<span class="employee-mail">${employees[i].email}</span>`;
-           html += '</span>';
-           html += '</div>';
-           html += '</div>';
-           html += '</div>';
+           html += '<li class="collection-item avatar">';
+           html += `<img src="${employees[i].avatarUrl}" alt="" class="circle">`;
+           html +=  `<span class="title">${employees[i].displayName}<span>`;
+           html += `<p>${employees[i].jobPosition} en ${employees[i].department}<br/>`;
+           html +=  `${employees[i].email}`;
+           html += '</p>';
+           html += `<span class="start-date secondary-content">Inicio de actividad: ${employees[i].startDate}</span>`;
+           html += '</li>';
        }
-         $("#latest-employees").html(html);
+         $("#latest-employees").append(html);
     }
 </script>
 <style>
@@ -107,9 +93,6 @@
     .avatar {
         font-weight: lighter;
         font-size: 20px;
-        padding: 10px;
-        margin-left: -11px;
-        display: flex;
         position: relative;
     }
     
@@ -124,5 +107,11 @@
       text-decoration: none;
       color: inherit;
       font-weight: bold;
+    }
+    .start-date {
+        font-style: italic;
+        font-weight: lighter;
+        font-size: 13px;
+        color: #9575cd;
     }
 </style>

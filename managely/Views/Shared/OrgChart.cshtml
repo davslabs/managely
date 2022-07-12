@@ -1,3 +1,8 @@
+@{
+    ViewBag.Title = "Home";
+    Layout = "_Layout";
+}
+
 <div id="tree"></div>
 <script>
     $(document).ready(async function () {
@@ -35,7 +40,7 @@
         chart.load(employeeRelations.map(employeeRelation => {
            return {
                id: employeeRelation.employeeId,
-               img: "http://ssl.gstatic.com/accounts/ui/avatar_2x.png",
+               img: employeeRelation.avatarUrl,
                department: employeeRelation.department,
                jobPosition: employeeRelation.jobPosition,
                name: employeeRelation.displayName,

@@ -1,0 +1,25 @@
+<select name="location" id="location-select"></select>
+<label for="location-select">Ubicación</label>
+
+<script>
+  $(document).ready(async function() {
+    await populateLocationSelect();      
+    const location = $('input[name="EmployeeLocation"]').val();
+    if (location) {
+        $('#location-select').val(location).change();          
+    }    
+    $('select').formSelect();        
+  });
+  
+  async function populateLocationSelect() {
+          const response = await fetch('https://restcountries.com/v3.1/region/ame');
+          const locations = await response.json();
+          const select = document.getElementById('location-select');
+          locations.forEach(location => {
+              const option = document.createElement('option');
+              option.value = location.name.common;
+              option.innerText = location.name.common;
+              select.appendChild(option);
+          });
+    }
+</script>

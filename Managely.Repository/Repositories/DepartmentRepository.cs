@@ -9,6 +9,10 @@ public class DepartmentRepository: GenericRepository<Department>, IDepartmentRep
 {
     public DepartmentRepository(ApplicationDbContext context) : base(context) { }
     
+    public async Task<List<Department>> GetAllDepartments()
+    {
+        return await _context.Departments.ToListAsync();
+    }
     public async Task<Department?> GetByValue(DepartmentName department)
     {
         return await _context.Departments.Where(d => d.Name.Equals(department)).FirstOrDefaultAsync();

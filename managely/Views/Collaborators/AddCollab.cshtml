@@ -1,0 +1,118 @@
+@model Managely.Models.ViewModel.AddCollaboratorViewModel
+
+<div class="row">
+    <form>
+        <div class="row">
+            <div class="input-field col s4">
+                <input id="name" name="name" type="text" class="validate">
+                <label for="name">Nombre</label>
+            </div>
+            <div class="input-field col s4">
+                <input id="lastName" name="lastName" type="text" class="validate">
+                <label for="lastName">Apellido</label>
+            </div>
+            <div class="input-field col s4">
+                <select name="role" id="role">
+                    <option selected disabled>Seleccione una opción</option>
+                    @foreach (var role in Model.Roles)
+                    {
+                        <option value="@role.RoleName">@role.Description</option>
+                    }
+                </select>
+                <label for="role">Rol</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s4">
+                <input name="phone" id="phone" type="text" class="validate">
+                <label for="phone">Teléfono</label>
+            </div>
+            <div class="input-field col s4">
+                <input name="email" id="email" type="text" class="validate">
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field col s4">
+                @{ await Html.RenderPartialAsync("Location"); }
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s4">
+                <select name="jobPosition" id="jobPosition">
+                    <option selected disabled>Seleccione una opción</option>
+                    @foreach(var jobPosition in Model.JobPositions)
+                    {
+                        <option value="@jobPosition.JobPositionName">@jobPosition.Description</option>
+                    }
+                </select>
+                <label for="jobPosition">Cargo</label>
+            </div>
+            <div class="input-field col s4">
+                <select name="department" id="department">
+                    <option selected disabled>Seleccione una opción</option>
+                    @foreach (var dep in Model.Departments)
+                    {
+                        <option value="@dep.DepartmentName">@dep.Description</option>
+                    }
+                </select>
+                <label for="department">Departamento</label>
+            </div>
+            <div class="input-field col s4">
+                <select name="reportsTo" id="reportsTo">
+                    <option selected disabled>Seleccione una opción</option>
+                    @foreach (var emp in Model.Employees)
+                    {
+                        <option value="@emp.EmployeeId">@emp.DisplayName</option>
+                    }
+                </select>
+                <label for="reportsTo">Reporta a</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6">
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Subir Avatar</span>
+                        <input name="avatarFile" type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col right">
+                <button id="addEmployee" class="btn waves-effect waves-light" type="button" name="action">Guardar
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+  $(document).ready(async function() {  
+      $('select').formSelect();
+  });
+  
+    $('#addEmployee').click(async function() {
+        const form = $('form');
+        const formData = new FormData(form[0]);
+        const response = await fetch('/api/employees', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response;
+        if (result.status === 200) {
+            const toastHTML = '<span>Se creo el empleado correctamente</span>';          
+            
+            M.toast({html: toastHTML, classes: 'green', displayLength: 2000});
+            setTimeout(function() {
+                window.location.href = '/Collaborators/Index';
+            }, 2000);
+        } else {
+            const toastHTML = '<span>No se pudo crear el empleado</span>';
+            M.toast({html: toastHTML, classes: 'red'});
+        }
+    });
+</script>

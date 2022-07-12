@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Managely.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220710144439_create-tables")]
-    partial class createtables
+    [Migration("20220711205434_Create-Tables")]
+    partial class CreateTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,43 +45,43 @@ namespace Managely.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            DepartmentId = new Guid("e222d8fc-69b6-47da-a94e-9d6c6b017278"),
+                            DepartmentId = new Guid("4290bfc8-c384-4170-8143-262f2e548577"),
                             Description = "IT",
                             Name = "IT"
                         },
                         new
                         {
-                            DepartmentId = new Guid("314b9b19-763e-4065-888f-aa5ba38b3f7a"),
+                            DepartmentId = new Guid("41f73399-28d0-4538-ae7a-84bc7a63b283"),
                             Description = "Finanzas",
                             Name = "Finance"
                         },
                         new
                         {
-                            DepartmentId = new Guid("c3f9f08c-bca7-4f15-ab75-686ebfd39b37"),
+                            DepartmentId = new Guid("186c9446-cb0b-4db9-a216-fb5ff6c40e4f"),
                             Description = "Marketing",
                             Name = "Marketing"
                         },
                         new
                         {
-                            DepartmentId = new Guid("7634e360-6477-4775-9990-7de1cff73cc1"),
+                            DepartmentId = new Guid("a35650f2-5146-4263-b042-5755db7d2954"),
                             Description = "Ventas",
                             Name = "Sales"
                         },
                         new
                         {
-                            DepartmentId = new Guid("104e3817-f5db-4827-8874-70ccebe8ef45"),
+                            DepartmentId = new Guid("0fb22393-69e8-47be-8fd3-7a8306e43c96"),
                             Description = "Recursos Humanos",
                             Name = "HumanResources"
                         },
                         new
                         {
-                            DepartmentId = new Guid("cbba8167-0f34-4de3-86c9-687d7ecbcddf"),
+                            DepartmentId = new Guid("4a82fd01-2301-4115-8d26-74168675aadd"),
                             Description = "Servicio al Cliente",
                             Name = "CustomerService"
                         },
                         new
                         {
-                            DepartmentId = new Guid("2038d67f-3cb7-4a07-add8-e69c9dea629c"),
+                            DepartmentId = new Guid("7985a54b-9fe4-44eb-b8ea-25f047d2c970"),
                             Description = "Comité de Gobernación",
                             Name = "Board"
                         });
@@ -92,6 +92,10 @@ namespace Managely.Repository.Migrations
                     b.Property<Guid>("EmployeeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AvatarUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("DepartmentId")
                         .HasColumnType("uniqueidentifier");
@@ -190,25 +194,25 @@ namespace Managely.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            JobPositionId = new Guid("8ae3a1f7-e20b-4321-af64-5f1ffc7673c8"),
+                            JobPositionId = new Guid("c789d06e-3e1d-4b54-a7c8-94c40532f8b3"),
                             Description = "Lider",
                             Name = "Head"
                         },
                         new
                         {
-                            JobPositionId = new Guid("5cc7f86c-2490-4a77-8dc2-cca090c5c917"),
+                            JobPositionId = new Guid("1a524604-9312-4d77-af7a-82070da3a447"),
                             Description = "Gerente",
                             Name = "Manager"
                         },
                         new
                         {
-                            JobPositionId = new Guid("81655a6c-f0a6-4f85-8a9e-2cbf65f58ac5"),
+                            JobPositionId = new Guid("a307c0b9-d8d0-484f-8f44-c64a6530060a"),
                             Description = "Staff",
                             Name = "Staff"
                         },
                         new
                         {
-                            JobPositionId = new Guid("934fe9d3-13c5-4c99-8c67-92c518faf9de"),
+                            JobPositionId = new Guid("ae475304-61fd-4e64-a000-089419f05c43"),
                             Description = "CEO",
                             Name = "CEO"
                         });
@@ -235,25 +239,25 @@ namespace Managely.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            PermissionId = new Guid("37536f0d-2cfd-4c7c-9f0f-ec4e118ed7e5"),
+                            PermissionId = new Guid("ca9b2b73-4235-42eb-9a3b-f1adc216b77b"),
                             Description = "Crear",
                             Name = "Create"
                         },
                         new
                         {
-                            PermissionId = new Guid("2c4c534f-7413-4f74-a716-becd91bdea86"),
+                            PermissionId = new Guid("b5ccdf0a-6887-4616-b2a1-6285a5a8c235"),
                             Description = "Editar",
                             Name = "Update"
                         },
                         new
                         {
-                            PermissionId = new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"),
+                            PermissionId = new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"),
                             Description = "Leer",
                             Name = "Read"
                         },
                         new
                         {
-                            PermissionId = new Guid("0bf24c64-faff-4c70-a5f6-b39ad14d1893"),
+                            PermissionId = new Guid("0a26a041-2921-468a-b68f-2f9175e2224c"),
                             Description = "Eliminar",
                             Name = "Delete"
                         });
@@ -283,21 +287,21 @@ namespace Managely.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            RoleId = new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713"),
+                            RoleId = new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee"),
                             Description = "Admin",
                             Name = "Admin",
                             isEnabled = true
                         },
                         new
                         {
-                            RoleId = new Guid("71277fc9-eed2-4296-8526-452376d76b21"),
+                            RoleId = new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944"),
                             Description = "Manager",
                             Name = "Manager",
                             isEnabled = true
                         },
                         new
                         {
-                            RoleId = new Guid("c7730fd5-0520-4eb3-8857-ba673e55f3b2"),
+                            RoleId = new Guid("8b8fdb6d-69ed-4bea-96d5-45147873cddb"),
                             Description = "Staff",
                             Name = "Staff",
                             isEnabled = true
@@ -327,57 +331,57 @@ namespace Managely.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            RolePermissionId = new Guid("74d0d4b4-28f3-4586-8a24-9292e1289546"),
-                            PermissionId = new Guid("37536f0d-2cfd-4c7c-9f0f-ec4e118ed7e5"),
-                            RoleId = new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713")
+                            RolePermissionId = new Guid("fa171399-152c-46f6-83f1-ea7c09a65a9f"),
+                            PermissionId = new Guid("ca9b2b73-4235-42eb-9a3b-f1adc216b77b"),
+                            RoleId = new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("32e34e30-4736-4c6a-8127-d72a0131429c"),
-                            PermissionId = new Guid("37536f0d-2cfd-4c7c-9f0f-ec4e118ed7e5"),
-                            RoleId = new Guid("71277fc9-eed2-4296-8526-452376d76b21")
+                            RolePermissionId = new Guid("f65bad2e-87b0-4be1-acda-ba82b4c88a65"),
+                            PermissionId = new Guid("ca9b2b73-4235-42eb-9a3b-f1adc216b77b"),
+                            RoleId = new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("c3e41618-bc75-4135-ab5f-35e25afde882"),
-                            PermissionId = new Guid("2c4c534f-7413-4f74-a716-becd91bdea86"),
-                            RoleId = new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713")
+                            RolePermissionId = new Guid("65197d0d-8cf3-43f4-8df3-a9c1602bee63"),
+                            PermissionId = new Guid("b5ccdf0a-6887-4616-b2a1-6285a5a8c235"),
+                            RoleId = new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("806202b5-1878-482c-bcd1-dc85e727999a"),
-                            PermissionId = new Guid("2c4c534f-7413-4f74-a716-becd91bdea86"),
-                            RoleId = new Guid("71277fc9-eed2-4296-8526-452376d76b21")
+                            RolePermissionId = new Guid("a233ea90-00e2-4838-b90b-f3b1b8c22ce8"),
+                            PermissionId = new Guid("b5ccdf0a-6887-4616-b2a1-6285a5a8c235"),
+                            RoleId = new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("5e18e688-9e7e-4907-898f-9b005547e499"),
-                            PermissionId = new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"),
-                            RoleId = new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713")
+                            RolePermissionId = new Guid("0c0be631-f3e5-4390-8e9d-4428f35aaf89"),
+                            PermissionId = new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"),
+                            RoleId = new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("42e5e386-9b0d-4525-af81-91308abc7f3f"),
-                            PermissionId = new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"),
-                            RoleId = new Guid("71277fc9-eed2-4296-8526-452376d76b21")
+                            RolePermissionId = new Guid("84626364-32d9-45b6-8a56-cbaa4f72e47d"),
+                            PermissionId = new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"),
+                            RoleId = new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("c3a7cea6-5331-4819-ba05-621f69d3e805"),
-                            PermissionId = new Guid("0bf24c64-faff-4c70-a5f6-b39ad14d1893"),
-                            RoleId = new Guid("03c74fb1-c1e8-4908-9d1c-d102e688e713")
+                            RolePermissionId = new Guid("01770bbe-eff2-4042-85bb-b826a7ed1dfe"),
+                            PermissionId = new Guid("0a26a041-2921-468a-b68f-2f9175e2224c"),
+                            RoleId = new Guid("ba6e0189-891c-4081-b6fa-53665e56c1ee")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("ee36c83c-046f-484f-be1e-f44df5473c25"),
-                            PermissionId = new Guid("0bf24c64-faff-4c70-a5f6-b39ad14d1893"),
-                            RoleId = new Guid("71277fc9-eed2-4296-8526-452376d76b21")
+                            RolePermissionId = new Guid("e23b0d0a-946d-48ca-930c-38279c55e77e"),
+                            PermissionId = new Guid("0a26a041-2921-468a-b68f-2f9175e2224c"),
+                            RoleId = new Guid("f2cd6c6d-7a4a-40df-97e8-62f1e42a2944")
                         },
                         new
                         {
-                            RolePermissionId = new Guid("62f770a8-3e8c-4699-aab0-07188b7fb98e"),
-                            PermissionId = new Guid("cfaae55f-0424-4ba9-887b-9defed6c9835"),
-                            RoleId = new Guid("c7730fd5-0520-4eb3-8857-ba673e55f3b2")
+                            RolePermissionId = new Guid("335f1cf0-c0fe-4710-b3cd-525912492a0a"),
+                            PermissionId = new Guid("20c76f55-686f-40b2-a845-2cd0a95c41f4"),
+                            RoleId = new Guid("8b8fdb6d-69ed-4bea-96d5-45147873cddb")
                         });
                 });
 
@@ -456,17 +460,21 @@ namespace Managely.Repository.Migrations
 
             modelBuilder.Entity("Managely.Domain.Models.RolePermission", b =>
                 {
-                    b.HasOne("Managely.Domain.Models.Permission", null)
+                    b.HasOne("Managely.Domain.Models.Permission", "Permission")
                         .WithMany("RolePermission")
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Managely.Domain.Models.Role", null)
+                    b.HasOne("Managely.Domain.Models.Role", "Role")
                         .WithMany("RolePermission")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("Managely.Domain.Models.Department", b =>
