@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col s12">
+        <ul class="collection with-header">
+            <li class="collection-header grey lighten-5"><h6>Fuera de oficina</h6></li>
+            <li id="vacation-chips"></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(document).ready(async function () {
+        const employeesOnTimeOff = await getEmployeesOnTimeOff();
+        setEmployeesOnTimeOff(employeesOnTimeOff);
+    });
+    function setEmployeesOnTimeOff(employeesOnTimeOff) {
+        const vacationChips = $('#vacation-chips');
+        vacationChips.empty();
+        employeesOnTimeOff.forEach(employee => {
+            const chip = $(`
+                <div class="chip">
+                    <img src="${employee.avatarUrl}" alt="${employee.displayName}">
+                    Desde ${new Date(employee.fromDate).toLocaleDateString("es-AR", {month: "long", day: "numeric" })} 
+                    hasta ${new Date(employee.thruDate).toLocaleDateString("es-AR", { month: "long", day: "numeric" })}
+                </div>
+            `);
+            vacationChips.append(chip);
+        });
+    }
+    
+    async function getEmployeesOnTimeOff() {
+        return await $.ajax({
+         url: "/api/employees/time-off",
+         type: "GET",
+         dataType: "json",
+         error: function (data) {
+             console.log(data);         
+         }});     
+    }
+</script>
+<style>
+    #vacation-chips {
+        display:  flex;
+        flex-direction: column;
+    }
+    #vacation-chips .chip {
+        margin: 5px 0 10px 15px;
+        background-color: white;
+    }
+</style>

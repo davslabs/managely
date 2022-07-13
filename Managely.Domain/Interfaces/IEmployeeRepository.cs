@@ -11,5 +11,6 @@ namespace Managely.Domain.Interfaces
         Task<Employee?> GetEmployeeByEmail(string email);
         Task<ICollection<TimeOff>> GetEmployeeTimeOff(Guid employeeId);
         Task<List<Employee>> GetEmployeesByDepartment(Guid departmentId);
+        Task<List<EmployeeTimeOff>> GetWhoIsOnTimeOff();
     }
 }

@@ -1,13 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Managely.Domain.Interfaces;
 using Managely.Domain.Models;
 using Managely.Models.DTO;
 using Managely.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managely.Controllers
 {
-    [Route("/api/employees/{employeeId}")]
+    [Authorize]
+    [Route("/api/employees")]
     [ApiController]
     public class TimeOffController : Controller
     {
@@ -18,13 +21,38 @@ namespace Managely.Controllers
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        
+        [HttpGet]
+        [Route("time-off")]
+        public async Task<IActionResult> GetWhoIsOnTimeOff()
+        {
+            try
+            {
+                var employees = await _unitOfWork.Employees.GetWhoIsOnTimeOff();
+                var employeesOnTimeOff = _mapper.Map<IEnumerable<EmployeeOnTimeOffDto>>(employees);
+                return Ok(employeesOnTimeOff);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         [HttpPost]
-        [Route("time-off")]
+        [Route("{employeeId}/time-off")]
         public async Task<IActionResult> AddEmployeeTimeOff([FromBody] AddTimeOffDto addTimeOffDto, Guid employeeId)
         {
             try
             {
+                //Si el empleado no es manager o admin,
+                //y el id del empleado no es el mismo que el del usuario logueado,
+                //no puede agregar una solicitud de vacaciones.
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                if (!User.IsInRole("Manager") && !User.IsInRole("Admin") && userId != employeeId.ToString())
+                {
+                    return Unauthorized(new { message = "No tienes permisos para cargar tiempo fuera de oficina de este empleado" });
+                }
+                
                 Employee? employee = await _unitOfWork.Employees.GetEmployeeById(employeeId);
                 if (employee == null) throw new Exception("El empleado no existe");
 
@@ -56,7 +84,7 @@ namespace Managely.Controllers
         }
 
         [HttpGet]
-        [Route("time-off")]
+        [Route("{employeeId}/time-off")]
         public async Task<IActionResult> GetEmployeeTimeOff(Guid employeeId)
         {
             try

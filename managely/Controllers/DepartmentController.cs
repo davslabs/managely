@@ -2,10 +2,12 @@ using AutoMapper;
 using Managely.Domain.Interfaces;
 using Managely.Domain.Models;
 using Managely.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managely.Controllers
 {
+    [Authorize]
     [Route("api/departments")]
     [ApiController]
     public class DepartmentController : Controller
@@ -24,7 +26,6 @@ namespace Managely.Controllers
             try
             {
                 var departments = await _unitOfWork.Departments.GetAll();
-                ICollection<object> employeesByDepartment = new List<object>();
                 List<EmployeeDepartmentViewModel> edv = new List<EmployeeDepartmentViewModel>();
                 foreach (var department in departments)
                 {
@@ -35,7 +36,6 @@ namespace Managely.Controllers
 
                     foreach (var employee in employees)
                     {
-                        var mappedEmployee = _mapper.Map<EmployeeProfileViewModel>(employee);
                         employeeProfileViewModels.Add(_mapper.Map<EmployeeProfileViewModel>(employee));
                     }
 

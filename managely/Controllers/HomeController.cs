@@ -3,10 +3,12 @@ using AutoMapper;
 using Managely.Domain.Interfaces;
 using Managely.Domain.Models;
 using Managely.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managely.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;

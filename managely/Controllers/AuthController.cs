@@ -4,6 +4,7 @@ using Managely.Domain.Models;
 using Managely.Models.DTO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managely.Controllers;
@@ -19,7 +20,7 @@ public class AuthController : Controller
     [HttpGet]
     public IActionResult Login()
     {
-        if (base.User.Identity is { IsAuthenticated: true })
+        if (User.Identity is { IsAuthenticated: true })
         {
             return base.Redirect("/Home/Index");
         }
@@ -70,18 +71,17 @@ public class AuthController : Controller
                 new AuthenticationProperties { IsPersistent = true }
             );
 
-            return Ok();
+            return RedirectToAction("Index", "Home");
         }
         catch (Exception ex)
         {
             return StatusCode(500, ex.Message);
         }
     }
-    
-    [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return Ok();
+        await HttpContext.SignOutAsync();
+        return Redirect("/");
     }
 }

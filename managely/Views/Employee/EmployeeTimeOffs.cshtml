@@ -196,6 +196,8 @@ function addTimeOff()  {
     const from = $("#from").val();
     const to = $("#to").val();
     const reason = $("#reason").val();
+    
+    console.log(from,  to,  reason);
     const data = {
         fromDate: new Date(from),
         thruDate: new Date(to),
@@ -344,41 +346,18 @@ $("select").formSelect();
 </script>
 
 <style>
-    .holidays li {
-        line-height: 0.5rem !important;
-    }
-    .holiday-title {
-        font-size: 1rem;
-        font-weight: bold;
-        line-height: 24px;
-    }
+    
     .title {
         font-size: 1.25rem !important;;
         font-weight: bold !important;;
         line-height:24px;
     }
-    .collection-item p {
-        font-style: italic !important;
-        font-size: 0.8rem !important;;
-    }
+
     .next-holidays {
         display: inline-flex;
         vertical-align: top;
     }
-    .collection {
-        margin: 0!important;;
-        padding: 0!important;
-        border: 0!important;
-        box-shadow: none!important;
-        background: #fff;
-    }
-    .holidays-heading {
-        padding-bottom: 15px;
-        border-bottom: 1px solid #e0e0e0;
-    }
-    .holidays .collection-item {
-        padding-top: 15px;
-    }
+
     #search_engine{
 	
    .se-engine{

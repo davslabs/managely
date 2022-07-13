@@ -2,10 +2,12 @@ using AutoMapper;
 using Managely.Domain.Interfaces;
 using Managely.Domain.Models;
 using Managely.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managely.Controllers;
 
+[Authorize]
 public class CollaboratorsController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -18,7 +20,7 @@ public class CollaboratorsController : Controller
         _mapper = mapper;
     }
 
-    // GET
+    [Authorize(Roles = "Admin, Manager")]
     public async Task<IActionResult> Index()
     {
         IEnumerable<Employee> employees = await _unitOfWork.Employees.GetAllEmployees();
@@ -27,6 +29,7 @@ public class CollaboratorsController : Controller
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin, Manager")]
     public async Task<IActionResult> AddNewEmployee()
     {
         List<Employee> employees = await _unitOfWork.Employees.GetAllEmployees();

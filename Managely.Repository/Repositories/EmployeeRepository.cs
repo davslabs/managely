@@ -63,6 +63,14 @@ namespace Managely.Repository.Repositories
             return employeeTimeOffs.Select(et => et.TimeOff).ToList();
         }
 
+        public async Task<List<EmployeeTimeOff>> GetWhoIsOnTimeOff()
+        => await _context.EmployeeTimeOffs
+                    .Include("Employee")
+                    .Include("TimeOff")
+                    
+                    .ToListAsync();
+        
+
         public async Task<List<Employee>> GetEmployeesByDepartment(Guid departmentId)
         {
             List<Employee> employeesByDepartment =

@@ -2,7 +2,11 @@
     ViewBag.Title = "Home";
     Layout = "_Layout";
 }
-
+<div class="row grey lighten-3">
+    <div class="header-title col s12">
+        <h1>Organizacion</h1>
+    </div>
+</div>
 <div id="tree"></div>
 <script>
     $(document).ready(async function () {
@@ -61,3 +65,8 @@
         })
     }
 </script>
+<style>
+    .header-title h1{
+      font-weight: lighter;          
+    }
+</style>

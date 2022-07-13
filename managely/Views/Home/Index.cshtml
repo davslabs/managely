@@ -1,5 +1,5 @@
 @{
-    ViewBag.Title = "Home";
+    ViewBag.Title = "Managely";
     Layout = "_Layout";
 }
 
@@ -33,12 +33,15 @@
                 </div>
             </div>
         </div>
-         @{ await Html.RenderPartialAsync("Holidays"); }
+        @{ await Html.RenderPartialAsync("Holidays"); }
+        
     </div>
     <div class="col s8">
         <ul id="latest-employees" class="collection with-header">
             <li class="collection-header grey lighten-5"><h6>Ingresos recientes</h6></li>
         </ul>
+        
+        @{ await Html.RenderPartialAsync("EmployeesOntimeOff"); }
     </div>
 </div>
 <script>

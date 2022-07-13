@@ -1,4 +1,5 @@
 @{
+    ViewBag.Title = "Login";
     Layout = null;
 }
 @model Managely.Models.DTO.LoginRequestDto
@@ -49,9 +50,10 @@
                                     <span class="red-text" asp-validation-for="Password"></span>
                                 </div>
                                 <div class="form-field" style="margin-top: 15px;">
-                                    <button type="submit"
-                                            class="btn-large deep-purple lighten-1 white-text waves-effect waves-dark"
-                                            style="width:100%;">Ingresar</button>
+                                    <button 
+                                        type="submit"
+                                        class="btn-large deep-purple lighten-1 white-text waves-effect waves-dark"
+                                        style="width:100%;">Ingresar</button>
                                 </div>
                             </form>
                         </div>
@@ -74,7 +76,7 @@
             url: this.action,
             data: $(this).serialize(),
             success: function(data) {
-                window.location = '/Home';
+                window.location = '/Home/Index';
             },
             error: function(xhr, status) {
                 const toastHTML = '<span>' + xhr.responseJSON.message + '</span>';

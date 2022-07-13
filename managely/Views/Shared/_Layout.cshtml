@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims
+﻿@using Managely.Domain.Models
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,23 +36,14 @@
             </a>
             <a href="#" data-target="mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="left hide-on-med-and-down">
-                <li><a asp-area="" asp-controller="Collaborators" asp-action="Index">Colaboradores</a></li>
+                @if (User.IsInRole(RoleName.Manager.ToString()) || User.IsInRole(RoleName.Admin.ToString()))
+                {
+                    <li><a asp-area="" asp-controller="Collaborators" asp-action="Index">Colaboradores</a></li>   
+                }
                 <li><a asp-area="" asp-controller="Collaborators" asp-action="Organization">Organizacion</a></li>
                 <li><a asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a></li>
             </ul>
         </nav>
-        <ul class="sidenav" id="mobile">
-            <li><div class="user-view">
-                    <div class="background deep-purple lighten-2"></div>
-                    <a href="#user"><img alt="" src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="responsive-img circle" /></a>
-                    <a href="#name"><span class="white-text name">@User.Claims.First(e => e.Type.Equals(ClaimTypes.GivenName)).Value</span></a>
-                    <a href="#email"><span class="white-text email">@User.Identity!.Name</span></a>
-                </div>
-            </li>
-            <li><a asp-area="" asp-controller="Collaborators" asp-action="Index">Colaboradores</a></li>
-            <li><a asp-area="" asp-controller="Collaborators" asp-action="Organization">Organizacion</a></li>
-            <li><a asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a></li>
-        </ul>
         <div id="loader" class="progress deep-purple lighten-3" style="height:5px; display: none">
             <div class="indeterminate deep-purple lighten-2"></div>
         </div>

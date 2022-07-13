@@ -4,10 +4,12 @@ using Managely.Domain.Models;
 using Managely.Models.DTO;
 using Managely.Models.ViewModel;
 using Managely.Providers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managely.Controllers
 {
+    [Authorize]
     [Route("api/employees")]
     [ApiController]
     public class EmployeeApiController : Controller
@@ -46,6 +48,7 @@ namespace Managely.Controllers
         }
         
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> AddEmployee([FromForm] AddEmployeeDto addEmployeeDto) 
         {
             try
@@ -96,6 +99,7 @@ namespace Managely.Controllers
 
         [HttpPut]
         [Route("{employeeId}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> UpdateEmployee([FromBody] UpdateEmployeeDto updateEmployeeDto, Guid employeeId)
         {
             try
@@ -123,6 +127,7 @@ namespace Managely.Controllers
 
         [HttpGet]
         [Route("{employeeId}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetEmployee(Guid employeeId)
         {
             try
